@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -37,14 +39,19 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
+            // 'id' => 'required|max:13',
             'judul' => 'required|max:255',
-            'halaman' => 'required|max:100',
+            'halaman' => 'required|max:5',
             'kategori' => 'required|max:100',
             'penerbit' => 'required|max:255',
         ]);
+
+        $uuid = Uuid::uuid4();
+        $validateData['id'] = Str::substr($uuid->toString(), 0, 13);
+        
         Book::create($validateData);
 
-        $request->session()->flash('success', "Successfully adding {$validateData['title']}!");
+        $request->session()->flash('success', "Successfully adding {$validateData['judul']}!");
         return redirect()->route('books.index');
     }
 
@@ -67,7 +74,7 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        return view('books.edit', compact('book'));
     }
 
     /**
@@ -79,8 +86,19 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        dump($request->all());
-        dump($book);
+        $rules = [
+            'judul' => 'required|max:255',
+            'halaman' => 'required|max:5',
+            'kategori' => 'required|max:100',
+            'penerbit' => 'required|max:255',
+        ];
+
+        $validated = $request->validate($rules);
+
+        $book->update($validated);
+
+        $request->session()->flash('success', "Berhasil memperbarui data film yang berjudul {$validated['judul']}");
+        return redirect()->route('books.index');
     }
 
     /**
@@ -94,7 +112,7 @@ class BookController extends Controller
         $book->delete();
         return redirect()->route('books.index')->with(
             'success',
-            "Successfully deleting {$book['title']}!"
+            "Successfully deleting {$book['judul']}!"
         );
     }
 }
