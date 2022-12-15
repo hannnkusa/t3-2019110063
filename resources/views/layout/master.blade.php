@@ -23,10 +23,12 @@
     <div class="row" id="body-row">
         {{-- Sidebar --}}
         <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
-            {{-- Menu List--}}
+            {{-- Menu List --}}
             <ul class="list-group">
                 {{-- Separator with title --}}
-                <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <li
+                    class="list-group-item sidebar-separator-title
+ text-muted d-flex align-items-center menu-collapsed">
                     <small>MAIN MENU</small>
                 </li>
                 {{-- Separator END --}}
@@ -37,7 +39,7 @@
                     </div>
                 </a>
             </ul>
-            {{-- Menu List END--}}
+            {{-- Menu List END --}}
         </div>
         {{-- Sidebar END --}}
         {{-- Content --}}
